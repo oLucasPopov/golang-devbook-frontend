@@ -12,7 +12,7 @@
 <body>
   <div class="container-login">
     <div>
-      <form class="devbook-form" id="formulario-cadastro">
+      <form class="devbook-form" id="formulario-cadastro" method="POST">
         <span>Crie a sua conta agora mesmo!</span>
         <div>
           <input type="text" name="nome" id="nome" placeholder="Digite o seu nome" required autocomplete="off">
@@ -31,10 +31,12 @@
         </div>
         
         <a href="/">Clique aqui para fazer o login</a>
-        <button type="submit" class="btn-devbook">Cadastrar</button>
+        <button type="submit" class="btn-devbook" >Cadastrar</button>
       </form>
     </div>
   </div>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/cadastro.js"></script>
 </body>
 
 </html>
