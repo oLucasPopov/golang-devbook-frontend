@@ -2,6 +2,8 @@ $('#nova-publicacao').on('submit', criarPublicacao)
 $(document).on('click', '.curtir-publicacao', curtirPublicacao)
 $(document).on('click', '.descurtir-publicacao', descurtirPublicacao)
 $('#atualizar-publicacao').on('click', atualizarPublicacao)
+$('.deletar-publicacao').on('click', deletarPublicacao)
+
 
 function criarPublicacao(evento) {
   evento.preventDefault()
@@ -94,5 +96,26 @@ function atualizarPublicacao(evento) {
     alert('Erro ao atualizar a publicação!')
   }).always(function () {
     btnPublicacao.prop('disabled', false)
+  })
+}
+
+function deletarPublicacao(evento) {
+  evento.preventDefault()
+  const elementoClicado = $(evento.target)
+  const publicacao = elementoClicado.closest('div')
+  const publicacaoID = publicacao.data('publicacao-id')
+
+  elementoClicado.prop('disabled', true)
+  $.ajax({
+    url: `/publicacoes/${publicacaoID}`,
+    method: 'DELETE'
+  }).done(function () {
+    publicacao.fadeOut("slow", ()=>{
+      publicacao.remove()
+    })
+  }).fail(function (erro) {
+    alert('Erro ao deletar a publicação!')
+  }).always(function () {
+    elementoClicado.prop('disabled', false)
   })
 }
