@@ -10,7 +10,7 @@ function criarUsuario(evento){
   let confirmarSenha = $('#confirmar-senha').val()
 
   if (senha !== confirmarSenha) {
-    alert('As senhas devem ser iguais!')
+    Swal.fire("Ops...", "As senhas devem ser iguais!", "error")
     return
   }
 
@@ -26,9 +26,8 @@ function criarUsuario(evento){
     method: 'POST',
     data: usuario,
   }).done(function(){
-    alert('Usuário criado com sucesso!')
+    Swal.fire("Sucesso!", "Usuário cadastrado com sucesso!", "success")
   }).fail(function(erro){
-    console.log(erro)
-    alert('Erro ao criar o usuário!')
+    Swal.fire("Ops...", "Erro ao cadastrar o usuário!", "error")
   })
 }
