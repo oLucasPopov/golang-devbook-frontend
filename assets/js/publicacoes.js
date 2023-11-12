@@ -1,5 +1,6 @@
 $('#nova-publicacao').on('submit', criarPublicacao)
-$('.curtir-publicacao').on('click', curtirPublicacao)
+$(document).on('click', '.curtir-publicacao', curtirPublicacao)
+$(document).on('click', '.descurtir-publicacao', descurtirPublicacao)
 
 function criarPublicacao(evento){
   evento.preventDefault()
@@ -38,8 +39,37 @@ function curtirPublicacao(evento){
     const qtdCurtidas = parseInt(contadorCurtidas.text())
 
     contadorCurtidas.text(qtdCurtidas + 1)
+
+    elementoClicado.addClass('descurtir-publicacao')
+    elementoClicado.addClass('text-danger')
+    elementoClicado.removeClass('curtir-publicacao')
   }).fail(function(erro){
     alert('Erro ao curtir a publicação!')
+  }).always(function(){
+    elementoClicado.prop('disabled', false)
+  })
+}
+
+function descurtirPublicacao(evento){
+  evento.preventDefault()
+  const elementoClicado = $(evento.target)
+  const publicacaoID = elementoClicado.closest('div').data('publicacao-id')
+
+  elementoClicado.prop('disabled', true)
+  $.ajax({
+    url: `/publicacoes/${publicacaoID}/descurtir`,
+    method: 'POST'
+  }).done(function(){
+    const contadorCurtidas = elementoClicado.next('span')
+    const qtdCurtidas = parseInt(contadorCurtidas.text())
+
+    contadorCurtidas.text(qtdCurtidas - 1)
+
+    elementoClicado.addClass('curtir-publicacao')
+    elementoClicado.removeClass('text-danger')
+    elementoClicado.removeClass('descurtir-publicacao')
+  }).fail(function(erro){
+    alert('Erro ao descurtir a publicação!')
   }).always(function(){
     elementoClicado.prop('disabled', false)
   })
