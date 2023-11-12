@@ -19,13 +19,17 @@ function criarPublicacao(evento) {
   $.ajax({
     url: '/publicacoes',
     method: 'POST',
-    data: publicacao
-  }).done(function () {
-    window.location = '/home'
-  }).fail(function (erro) {
-    console.log(erro)
-    alert('Erro ao criar a publicação!')
+    data: publicacao,
+    complete: function (xhr, status) {
+      if (xhr.status === 201) {
+        window.location = '/home'
+      } else {
+        console.log(erro.responseStatus)
+        alert('Erro ao criar a publicação!')
+      }
+    }
   })
+
 }
 
 function curtirPublicacao(evento) {
@@ -81,7 +85,7 @@ function descurtirPublicacao(evento) {
 function atualizarPublicacao(evento) {
   const btnPublicacao = $('#atualizar-publicacao')
   const publicacaoID = $(this).data('publicacao-id')
-  
+
   btnPublicacao.prop('disabled', true)
   $.ajax({
     url: `/publicacoes/${publicacaoID}`,
@@ -91,7 +95,10 @@ function atualizarPublicacao(evento) {
       conteudo: $('#conteudo').val()
     }
   }).done(function () {
-    alert('Publicação atualizada!')
+    Swal.fire("Sucesso!", "Publicação atualizada com sucesso!", "success")
+      .then(() => {
+        window.location = '/home'
+      })
   }).fail(function (erro) {
     alert('Erro ao atualizar a publicação!')
   }).always(function () {
@@ -101,21 +108,38 @@ function atualizarPublicacao(evento) {
 
 function deletarPublicacao(evento) {
   evento.preventDefault()
-  const elementoClicado = $(evento.target)
-  const publicacao = elementoClicado.closest('div')
-  const publicacaoID = publicacao.data('publicacao-id')
 
-  elementoClicado.prop('disabled', true)
-  $.ajax({
-    url: `/publicacoes/${publicacaoID}`,
-    method: 'DELETE'
-  }).done(function () {
-    publicacao.fadeOut("slow", ()=>{
-      publicacao.remove()
+  Swal.fire({
+    title: 'Atenção!',
+    title: 'Deseja mesmo deletar esta publicação?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Cancelar',
+    focusCancel: true
+  }).then((result) => {
+    if (!result.isConfirmed) return
+
+    const elementoClicado = $(evento.target)
+    const publicacao = elementoClicado.closest('div')
+    const publicacaoID = publicacao.data('publicacao-id')
+
+    elementoClicado.prop('disabled', true)
+    $.ajax({
+      url: `/publicacoes/${publicacaoID}`,
+      method: 'DELETE'
+    }).done(function () {
+      publicacao.fadeOut("slow", () => {
+        publicacao.remove()
+      })
+    }).fail(function (erro) {
+      alert('Erro ao deletar a publicação!')
+    }).always(function () {
+      elementoClicado.prop('disabled', false)
     })
-  }).fail(function (erro) {
-    alert('Erro ao deletar a publicação!')
-  }).always(function () {
-    elementoClicado.prop('disabled', false)
   })
+
+
 }
