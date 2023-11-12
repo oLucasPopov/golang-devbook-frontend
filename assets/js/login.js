@@ -19,6 +19,6 @@ function fazerLogin(evento){
     window.location = '/home'
   }).fail(function(erro){
     console.log(erro)
-    alert('Erro ao realizar o login!')
+    Swal.fire("Ops...", "Erro ao realizar o login!", "error")
   })
 }
