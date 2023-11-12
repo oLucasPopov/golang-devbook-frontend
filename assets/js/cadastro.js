@@ -27,6 +27,20 @@ function criarUsuario(evento){
     data: usuario,
   }).done(function(){
     Swal.fire("Sucesso!", "Usuário cadastrado com sucesso!", "success")
+    .then(() => {
+      $.ajax({
+        url: '/login',
+        method: 'POST',
+        data: {
+          email,
+          senha
+        }
+      }).done(()=>{
+        window.location = '/home'
+      }).fail(()=>{
+        Swal.fire("Ops...", "Erro ao autenticar o usuário!", "error")
+      })
+    })
   }).fail(function(erro){
     Swal.fire("Ops...", "Erro ao cadastrar o usuário!", "error")
   })
