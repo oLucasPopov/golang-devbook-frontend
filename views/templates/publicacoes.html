@@ -4,8 +4,8 @@
 {{ end }}
 
 {{ define "editar" }}
-  <a href="/editar"><i class="fa-solid fa-pen-to-square" style="text-decoration: none"></i></a>
-  {{ end }}
+  <a href="/publicacoes/{{ .ID }}/atualizar"><i class="fa-solid fa-pen-to-square" style="text-decoration: none"></i></a>
+{{ end }}
   
 {{ define "deletar" }}  
   <a href="/deletar"><i class="fa-solid fa-trash text-danger" style="text-decoration: none"></i></a>
@@ -24,8 +24,8 @@
   {{template "cabecalho-publicacao" . }}
   <p>
     {{ template "curtidas" . }}
-    {{ template "editar" }}
-    {{ template "deletar" }}
+    {{ template "editar" . }}
+    {{ template "deletar" . }}
   </p>
 </div>
 {{ end }}
