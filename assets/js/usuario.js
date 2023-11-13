@@ -2,6 +2,7 @@ $('#parar-de-seguir').on('click', pararDeSeguir)
 $('#seguir').on('click', seguir)
 $('#editar-usuario').on('submit', editarUsuario)
 $('#atualizar-senha').on('submit', atualizarSenha)
+$('#deletar-usuario').on('click', deletarUsuario)
 
 function pararDeSeguir() {
   const usuarioID = $('#parar-de-seguir').data('usuario-id')
@@ -80,5 +81,32 @@ function atualizarSenha(evento) {
     })
   }).fail(function () {
     Swal.fire("Ops...", "Erro ao atualizar a senha!", "error")
+  })
+}
+
+function deletarUsuario() {
+  Swal.fire({
+    title: 'Atenção!',
+    text: 'Deseja mesmo deletar este usuário? Essa é uma ação irreversível!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Cancelar',
+    focusCancel: true
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: '/deletar-usuario',
+        method: 'DELETE'
+      }).done(function () {
+        Swal.fire("Sucesso!", "Usuário deletado com sucesso!", "success").then(() => {
+          window.location = '/logout'
+        })
+      }).fail(function () {
+        Swal.fire("Ops...", "Erro ao deletar o usuário!", "error")
+      })
+    }
   })
 }
